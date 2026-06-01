@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salty Duck Restaurant — December 2025</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;--border:#1e2d45;--accent:#3b82f6;--accent2:#10b981;--danger:#ef4444;--warning:#f59e0b;--text:#e2e8f0;--muted:#64748b;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Cairo','Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body.ltr{direction:ltr;font-family:'Inter','Cairo',sans-serif;}
+body.rtl{direction:rtl;font-family:'Cairo','Inter',sans-serif;}
+.bg-anim{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-anim span{position:absolute;border-radius:50%;animation:float 12s infinite ease-in-out;}
+.bg-anim span:nth-child(1){width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(59,130,246,0.07),transparent 70%);}
+.bg-anim span:nth-child(2){width:400px;height:400px;bottom:0;left:0;animation-delay:-4s;background:radial-gradient(circle,rgba(16,185,129,0.06),transparent 70%);}
+.bg-anim span:nth-child(3){width:300px;height:300px;top:50%;right:40%;animation-delay:-8s;background:radial-gradient(circle,rgba(59,130,246,0.05),transparent 70%);}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(20px,-20px) scale(1.05);}}
+.container{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:24px 16px;}
+.lang-bar{display:flex;justify-content:flex-end;margin-bottom:16px;gap:8px;}
+.lang-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:6px 18px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-family:inherit;transition:all 0.2s;}
+.lang-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;}
+header{text-align:center;padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px;}
+.h-logo{font-size:2.6rem;margin-bottom:6px;}
+.h-name{font-size:2rem;font-weight:900;background:linear-gradient(135deg,#3b82f6,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.h-sub{color:var(--muted);font-size:0.95rem;margin-top:4px;}
+.h-badge{display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 18px;font-size:0.82rem;color:var(--accent);margin-top:10px;}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;}
+.tab-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:8px 18px;border-radius:24px;cursor:pointer;font-family:inherit;font-size:0.88rem;transition:all 0.2s;}
+.tab-btn:hover{border-color:var(--accent);color:var(--text);}
+.tab-btn.active{background:linear-gradient(135deg,#1d4ed8,#0ea5e9);border-color:transparent;color:#fff;font-weight:700;}
+.section{display:none;animation:fadeIn 0.3s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
+.card-title{font-size:1.05rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.card-sub{font-size:0.8rem;color:var(--muted);margin-bottom:16px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.kpi-grid{grid-template-columns:1fr;}}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;transition:transform 0.2s,box-shadow 0.2s;}
+.kpi-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;}
+.kpi-card.blue::before{background:linear-gradient(90deg,#3b82f6,#0ea5e9);}
+.kpi-card.green::before{background:linear-gradient(90deg,#10b981,#34d399);}
+.kpi-card.yellow::before{background:linear-gradient(90deg,#f59e0b,#fbbf24);}
+.kpi-icon{font-size:1.6rem;margin-bottom:6px;}
+.kpi-label{font-size:0.75rem;color:var(--muted);margin-bottom:3px;}
+.kpi-value{font-size:1.5rem;font-weight:900;line-height:1.1;}
+.kpi-value.pos{color:#10b981;}.kpi-value.neg{color:#ef4444;}.kpi-value.neu{color:#3b82f6;}
+.kpi-change{font-size:0.75rem;margin-top:5px;}
+.kpi-change.up{color:#10b981;}.kpi-change.dn{color:#ef4444;}.kpi-change.flat{color:var(--muted);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+.cw{position:relative;width:100%;}
+.cw-240{height:240px;}.cw-300{height:300px;}.cw-360{height:360px;}
+.tg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.tb{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 14px;border-radius:20px;cursor:pointer;font-family:inherit;font-size:0.8rem;transition:all 0.15s;}
+.tb.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.tb:hover:not(.active){border-color:var(--accent);color:var(--text);}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.chip{padding:3px 10px;border-radius:14px;font-size:0.75rem;cursor:pointer;border:1px solid transparent;transition:all 0.15s;font-family:inherit;}
+.chip.off{opacity:0.3;}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+.stat-box .sl{font-size:0.75rem;color:var(--muted);margin-bottom:4px;}
+.stat-box .sv{font-size:1.1rem;font-weight:700;}
+.cf-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:18px 0;}
+.cf-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;min-width:150px;}
+.cf-box .cfl{font-size:0.75rem;color:var(--muted);margin-bottom:5px;}
+.cf-box .cfv{font-size:1.3rem;font-weight:900;}
+.cf-arr{font-size:1.4rem;color:var(--muted);}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;}
+@media(max-width:600px){.stat-grid{grid-template-columns:1fr;}}
+.sim-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+@media(max-width:700px){.sim-wrap{grid-template-columns:1fr;}}
+.sldr{margin-bottom:16px;}
+.sldr label{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--muted);margin-bottom:5px;}
+.sldr label span{color:var(--accent);font-weight:700;}
+input[type=range]{width:100%;accent-color:var(--accent);}
+.sim-out{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sim-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+.sim-box .sl{font-size:0.75rem;color:var(--muted);margin-bottom:4px;}
+.sim-box .sv{font-size:1.2rem;font-weight:900;}
+.sim-net{grid-column:1/-1;border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.08);}
+.sim-net-loss{border-color:rgba(239,68,68,0.4)!important;background:rgba(239,68,68,0.08)!important;}
+.target-card{background:linear-gradient(135deg,#0f2027,#1a3a4a);border:1px solid rgba(59,130,246,0.3);border-radius:16px;padding:24px;margin-bottom:20px;}
+.insight{background:var(--surface2);border-radius:10px;padding:12px 16px;font-size:0.8rem;color:var(--muted);margin-top:12px;line-height:1.7;}
+.insight.good{border-right:3px solid var(--accent2);}
+.insight.warn{border-right:3px solid var(--warning);}
+body.ltr .insight.good{border-right:none;border-left:3px solid var(--accent2);}
+body.ltr .insight.warn{border-right:none;border-left:3px solid var(--warning);}
+
+/* ── P&L TABLE ── */
+.pl-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+.pl-badge{display:inline-block;font-size:0.72rem;padding:3px 10px;border-radius:10px;font-weight:600;}
+.badge-nov{background:rgba(100,116,139,0.2);color:#94a3b8;}
+.badge-move{background:rgba(59,130,246,0.15);color:#3b82f6;}
+.badge-dec{background:rgba(16,185,129,0.15);color:#10b981;}
+.pl-wrap{overflow-x:auto;}
+.pl-tbl{width:100%;border-collapse:collapse;font-size:0.85rem;min-width:560px;}
+.pl-tbl th{padding:10px 14px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;}
+.pl-tbl th.hm{color:#3b82f6;}
+.pl-tbl td{padding:9px 14px;border-bottom:1px solid rgba(30,45,69,0.5);}
+.pl-tbl tr:hover td{background:rgba(59,130,246,0.03);}
+.pl-tbl .rt td{font-weight:900;border-top:2px solid var(--border);border-bottom:2px solid var(--border);background:rgba(59,130,246,0.06);font-size:0.92rem;padding:11px 14px;}
+.pl-tbl .rn td{font-weight:900;border-top:2px solid rgba(16,185,129,0.5);background:rgba(16,185,129,0.07);font-size:0.98rem;padding:13px 14px;}
+.pl-tbl .rm td{color:var(--muted);font-size:0.8rem;font-style:italic;}
+.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+body.ltr .n{text-align:right;}
+.n.p{color:#10b981;}.n.g{color:#ef4444;}.n.m{color:#3b82f6;font-weight:700;}
+.n.mp{color:#10b981;font-weight:700;}.n.mg{color:#ef4444;font-weight:700;}
+.hcol{background:rgba(59,130,246,0.04);}
+
+/* Rev channel cards */
+.rch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+@media(max-width:600px){.rch-grid{grid-template-columns:1fr;}}
+.rch{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;position:relative;overflow:hidden;}
+.rch::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+.rch.c1::after{background:#3b82f6;}.rch.c2::after{background:#10b981;}.rch.c3::after{background:#f59e0b;}
+.rch-icon{font-size:1.4rem;margin-bottom:6px;}
+.rch-lbl{font-size:0.75rem;color:var(--muted);margin-bottom:4px;}
+.rch-val{font-size:1.4rem;font-weight:900;}
+.rch-pct{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.rch-ytd{font-size:0.72rem;margin-top:6px;padding:2px 9px;border-radius:10px;display:inline-block;background:rgba(59,130,246,0.1);color:#3b82f6;}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+</style>
+</head>
+<body class="rtl">
+<div class="bg-anim"><span></span><span></span><span></span></div>
+<div class="container">
+
+<!-- LANG -->
+<div class="lang-bar">
+  <button class="lang-btn active" id="btnAR" onclick="setLang('ar')">🇦🇪 عربي</button>
+  <button class="lang-btn" id="btnEN" onclick="setLang('en')">🇬🇧 English</button>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="h-logo">🦆</div>
+  <div class="h-name" data-ar="مطعم سالتي داك" data-en="Salty Duck Restaurant"></div>
+  <div class="h-sub" data-ar="لوحة الأداء المالي الشهرية" data-en="Monthly Financial Performance Dashboard"></div>
+  <div class="h-badge" data-ar="ديسمبر 2025 — دينار كويتي (KD)" data-en="December 2025 — Kuwaiti Dinar (KD)"></div>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview',this)" data-ar="📊 نظرة عامة" data-en="📊 Overview"></button>
+  <button class="tab-btn" onclick="showTab('pl',this)" data-ar="📑 الأرباح والخسائر" data-en="📑 P&L Statement"></button>
+  <button class="tab-btn" onclick="showTab('revenue',this)" data-ar="💰 الإيرادات" data-en="💰 Revenue"></button>
+  <button class="tab-btn" onclick="showTab('expenses',this)" data-ar="📋 المصاريف" data-en="📋 Expenses"></button>
+  <button class="tab-btn" onclick="showTab('cashflow',this)" data-ar="🏦 التدفق النقدي" data-en="🏦 Cash Flow"></button>
+  <button class="tab-btn" onclick="showTab('simulator',this)" data-ar="🎯 المحاكي" data-en="🎯 Simulator"></button>
+</div>
+
+<!-- ══ OVERVIEW ══ -->
+<div id="tab-overview" class="section active">
+  <div class="kpi-grid">
+    <div class="kpi-card blue"><div class="kpi-icon">📈</div><div class="kpi-label" data-ar="إيرادات ديسمبر (الشهر فقط)" data-en="December Revenue (Month Only)"></div><div class="kpi-value neu">8,419 KD</div><div class="kpi-change dn" data-ar="▼ 8.2% عن نوفمبر" data-en="▼ 8.2% vs November"></div></div>
+    <div class="kpi-card blue"><div class="kpi-icon">📊</div><div class="kpi-label" data-ar="هامش الربح الإجمالي" data-en="Gross Profit Margin"></div><div class="kpi-value neu">76%</div><div class="kpi-change flat" data-ar="ثابت طوال 2025" data-en="Stable throughout 2025"></div></div>
+    <div class="kpi-card green"><div class="kpi-icon">💵</div><div class="kpi-label" data-ar="صافي ربح ديسمبر (الشهر)" data-en="Net Profit December (Month)"></div><div class="kpi-value pos">1,705 KD</div><div class="kpi-change dn" data-ar="▼ من 3,188 KD (نوفمبر)" data-en="▼ From 3,188 KD (November)"></div></div>
+    <div class="kpi-card yellow"><div class="kpi-icon">🧾</div><div class="kpi-label" data-ar="المصاريف الإدارية (الشهر)" data-en="G&A Expenses (Month)"></div><div class="kpi-value neu">4,241 KD</div><div class="kpi-change dn" data-ar="▲ 15.6% عن نوفمبر" data-en="▲ 15.6% vs November"></div></div>
+    <div class="kpi-card green"><div class="kpi-icon">🏦</div><div class="kpi-label" data-ar="النقدية الختامية 31 ديسمبر" data-en="Closing Cash Dec 31"></div><div class="kpi-value pos">5,409 KD</div><div class="kpi-change up" data-ar="▲ +991 KD خلال الشهر" data-en="▲ +991 KD during month"></div></div>
+    <div class="kpi-card green"><div class="kpi-icon">📅</div><div class="kpi-label" data-ar="صافي الربح التراكمي 2025" data-en="YTD Net Profit 2025"></div><div class="kpi-value pos">966 KD</div><div class="kpi-change up" data-ar="▲ يناير → ديسمبر 2025" data-en="▲ Jan → Dec 2025"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-ar="📊 مقارنة الأداء الشهري — ديسمبر vs نوفمبر" data-en="📊 Monthly Performance — December vs November"></div>
+    <div class="card-sub" data-ar="أرقام كل شهر منفردةً (من عمود حركة الفترة)" data-en="Standalone monthly figures (from Period Movement column)"></div>
+    <div class="tg"><button class="tb active" id="btnCmp" onclick="toggleCmp(this)" data-ar="إخفاء نوفمبر" data-en="Hide November"></button></div>
+    <div class="cw cw-360"><canvas id="cPerf"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-ar="📉 اتجاهات العام الكامل 2025" data-en="📉 Full Year 2025 Trends"></div>
+    <div class="card-sub" data-ar="الإيرادات وصافي الربح لكل شهر منفرداً" data-en="Standalone monthly revenue and net profit"></div>
+    <div class="g2">
+      <div><div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px;" data-ar="الإيرادات الشهرية" data-en="Monthly Revenue"></div><div class="cw cw-300"><canvas id="cYtdRev"></canvas></div></div>
+      <div><div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px;" data-ar="صافي الربح / (الخسارة)" data-en="Net Profit / (Loss)"></div><div class="cw cw-300"><canvas id="cYtdProfit"></canvas></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ P&L ══ -->
+<div id="tab-pl" class="section">
+  <div class="card">
+    <div class="card-title" data-ar="📑 قائمة الأرباح والخسائر — كما في 31 ديسمبر 2025" data-en="📑 Profit or Loss Statement — As of December 31, 2025"></div>
+    <div class="card-sub" data-ar="تعرض الأعمدة: تراكمي يناير→نوفمبر | ديسمبر وحده | التراكمي الكامل 2025" data-en="Columns show: Jan→Nov Cumulative | December Only | Full Year 2025 Cumulative"></div>
+    <div class="pl-legend">
+      <span class="pl-badge badge-nov" data-ar="نوفمبر 30 — تراكمي يناير→نوفمبر" data-en="Nov 30 — Cumulative Jan→Nov"></span>
+      <span class="pl-badge badge-move" data-ar="حركة الفترة — ديسمبر فقط" data-en="Period Movement — Dec Only"></span>
+      <span class="pl-badge badge-dec" data-ar="ديسمبر 31 — تراكمي 2025" data-en="Dec 31 — Full Year 2025"></span>
+    </div>
+    <div class="pl-wrap">
+      <table class="pl-tbl">
+        <thead>
+          <tr>
+            <th style="min-width:210px;" data-ar="البيان" data-en="Item"></th>
+            <th data-ar="ملاحظة" data-en="Note"></th>
+            <th class="n" data-ar="نوفمبر 30، 2025" data-en="November 30, 2025"></th>
+            <th class="n hm hcol" data-ar="حركة الفترة (ديسمبر)" data-en="Period Movement (Dec)"></th>
+            <th class="n" data-ar="ديسمبر 31، 2025" data-en="December 31, 2025"></th>
+          </tr>
+        </thead>
+        <tbody id="plBody"></tbody>
+      </table>
+    </div>
+    <div class="g4" style="margin-top:18px;">
+      <div class="stat-box"><div class="sl" data-ar="هامش إجمالي — ديسمبر" data-en="Gross Margin — December"></div><div class="sv" style="color:#3b82f6;">76%</div></div>
+      <div class="stat-box"><div class="sl" data-ar="هامش إجمالي — تراكمي" data-en="Gross Margin — YTD"></div><div class="sv" style="color:#3b82f6;">76%</div></div>
+      <div class="stat-box"><div class="sl" data-ar="صافي/إيرادات — ديسمبر" data-en="Net Margin — December"></div><div class="sv" style="color:#10b981;">20%</div></div>
+      <div class="stat-box"><div class="sl" data-ar="صافي/إيرادات — تراكمي" data-en="Net Margin — YTD"></div><div class="sv" style="color:#10b981;">1%</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-ar="📊 مقارنة بصرية — الشهر مقابل التراكمي" data-en="📊 Visual Comparison — Month vs Cumulative"></div>
+    <div class="card-sub" data-ar="ديسمبر وحده مقابل التراكمي الكامل 2025" data-en="December standalone vs Full Year 2025 cumulative"></div>
+    <div class="tg">
+      <button class="tb active" id="plV1" onclick="switchPLV('month',this)" data-ar="ديسمبر فقط" data-en="December Only"></button>
+      <button class="tb" id="plV2" onclick="switchPLV('ytd',this)" data-ar="تراكمي 2025" data-en="Full Year YTD"></button>
+      <button class="tb" id="plV3" onclick="switchPLV('both',this)" data-ar="المقارنة" data-en="Side by Side"></button>
+    </div>
+    <div class="cw cw-360"><canvas id="cPLChart"></canvas></div>
+  </div>
+</div>
+
+<!-- ══ REVENUE ══ -->
+<div id="tab-revenue" class="section">
+  <div class="card">
+    <div class="card-title" data-ar="💰 مصادر الإيراد — ديسمبر 2025 (الشهر فقط)" data-en="💰 Revenue Sources — December 2025 (Month Only)"></div>
+    <div class="card-sub" data-ar="إجمالي ديسمبر: 8,419 KD — من عمود حركة الفترة | التراكمي السنوي: 65,779 KD" data-en="December total: 8,419 KD from Period Movement column | Full year cumulative: 65,779 KD"></div>
+    <div class="rch-grid">
+      <div class="rch c1">
+        <div class="rch-icon">🏧</div>
+        <div class="rch-lbl" data-ar="كي-نت — ديسمبر" data-en="Knet — December"></div>
+        <div class="rch-val" style="color:#3b82f6;">4,520 KD</div>
+        <div class="rch-pct">53.7% <span data-ar="من الشهر" data-en="of month"></span></div>
+        <div class="rch-ytd" data-ar="تراكمي 2025: 38,309 KD" data-en="YTD 2025: 38,309 KD"></div>
+      </div>
+      <div class="rch c2">
+        <div class="rch-icon">💳</div>
+        <div class="rch-lbl" data-ar="بطاقات ائتمان — ديسمبر" data-en="Credit Cards — December"></div>
+        <div class="rch-val" style="color:#10b981;">3,428 KD</div>
+        <div class="rch-pct">40.7% <span data-ar="من الشهر" data-en="of month"></span></div>
+        <div class="rch-ytd" data-ar="تراكمي 2025: 23,274 KD" data-en="YTD 2025: 23,274 KD"></div>
+      </div>
+      <div class="rch c3">
+        <div class="rch-icon">💵</div>
+        <div class="rch-lbl" data-ar="نقدي — ديسمبر" data-en="Cash — December"></div>
+        <div class="rch-val" style="color:#f59e0b;">471 KD</div>
+        <div class="rch-pct">5.6% <span data-ar="من الشهر" data-en="of month"></span></div>
+        <div class="rch-ytd" data-ar="تراكمي 2025: 3,309 KD" data-en="YTD 2025: 3,309 KD"></div>
+      </div>
+    </div>
+    <div class="insight warn" data-ar="ℹ️ مبيعات الموقع الإلكتروني (887 KD) هي رقم تراكمي لعام 2025 كاملاً وليس لديسمبر وحده، لذلك لا تُدرج في الأرقام الشهرية." data-en="ℹ️ Website sales (887 KD) is a full-year 2025 cumulative figure, not specific to December — therefore excluded from the monthly breakdown."></div>
+    <div class="tg" style="margin-top:16px;">
+      <button class="tb active" id="rD" onclick="switchRev('doughnut',this)" data-ar="دائري مجوف" data-en="Doughnut"></button>
+      <button class="tb" id="rP" onclick="switchRev('pie',this)" data-ar="دائري" data-en="Pie"></button>
+      <button class="tb" id="rB" onclick="switchRev('bar',this)" data-ar="أعمدة" data-en="Bar"></button>
+    </div>
+    <div class="g2">
+      <div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px;" data-ar="توزيع ديسمبر الشهري" data-en="December Monthly Breakdown"></div><div class="cw cw-300"><canvas id="cRevSrc"></canvas></div></div>
+      <div><div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px;" data-ar="ديسمبر الشهري مقابل التراكمي السنوي" data-en="December Monthly vs YTD Cumulative"></div><div class="cw cw-300"><canvas id="cRevCmp"></canvas></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-ar="📊 تطور الإيرادات والمصاريف الشهرية — 2025" data-en="📊 Monthly Revenue & Expenses Trend — 2025"></div>
+    <div class="card-sub" data-ar="أرقام منفردة لكل شهر" data-en="Standalone figures per month"></div>
+    <div class="cw cw-360"><canvas id="cRevTrend"></canvas></div>
+  </div>
+</div>
+
+<!-- ══ EXPENSES ══ -->
+<div id="tab-expenses" class="section">
+  <div class="card">
+    <div class="card-title" data-ar="📋 تحليل المصاريف — ديسمبر 2025 (الشهر)" data-en="📋 Expense Analysis — December 2025 (Month)"></div>
+    <div class="card-sub" data-ar="إجمالي المصاريف الإدارية: 4,241 KD | الاستهلاك: 422 KD" data-en="Total G&A: 4,241 KD | Depreciation: 422 KD"></div>
+    <div class="tg">
+      <button class="tb active" id="eBar" onclick="switchExp('bar',this)" data-ar="أعمدة عمودية" data-en="Vertical Bars"></button>
+      <button class="tb" id="eHBar" onclick="switchExp('hbar',this)" data-ar="أعمدة أفقية" data-en="Horizontal Bars"></button>
+      <button class="tb" id="ePie" onclick="switchExp('pie',this)" data-ar="دائري" data-en="Pie"></button>
+    </div>
+    <div class="chips" id="expChips"></div>
+    <div class="cw cw-360"><canvas id="cExp"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-ar="📈 مقارنة المصاريف الشهرية — 2025" data-en="📈 Monthly Expense Comparison — 2025"></div>
+    <div class="card-sub" data-ar="تطور بنود المصاريف الرئيسية شهرياً" data-en="Key expense items throughout the year"></div>
+    <div class="cw cw-360"><canvas id="cExpTrend"></canvas></div>
+    <div class="insight warn" data-ar="⚠️ ارتفعت المصاريف الإدارية في ديسمبر بمقدار 572 KD عن نوفمبر، مدفوعةً بزيادة لوازم المحل (+190 KD) والصيانة (+136 KD)." data-en="⚠️ G&A expenses rose 572 KD in December vs November, driven by shop supplies (+190 KD) and maintenance (+136 KD)."></div>
+  </div>
+</div>
+
+<!-- ══ CASH FLOW ══ -->
+<div id="tab-cashflow" class="section">
+  <div class="card">
+    <div class="card-title" data-ar="🏦 التدفق النقدي — تراكمي 2025" data-en="🏦 Cash Flow — Cumulative 2025"></div>
+    <div class="card-sub" data-ar="حركة النقدية التراكمية من يناير إلى ديسمبر 2025" data-en="Cumulative cash movements Jan to Dec 2025"></div>
+    <div class="cf-row">
+      <div class="cf-box"><div class="cfl" data-ar="النقدية الافتتاحية" data-en="Opening Cash (Jan 2025)"></div><div class="cfv" style="color:var(--muted);">4,418 KD</div></div>
+      <div class="cf-arr">←</div>
+      <div class="cf-box" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.3);"><div class="cfl" data-ar="صافي الزيادة 2025" data-en="Net Increase 2025"></div><div class="cfv" style="color:#10b981;">+ 991 KD</div></div>
+      <div class="cf-arr">←</div>
+      <div class="cf-box" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.4);"><div class="cfl" data-ar="النقدية الختامية 31 ديسمبر" data-en="Closing Cash Dec 31"></div><div class="cfv" style="color:#10b981;">5,409 KD</div></div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="sl" data-ar="⚙️ تدفق تشغيلي" data-en="⚙️ Operating CF"></div><div class="sv" style="color:#10b981;">10,490 KD</div></div>
+      <div class="stat-box"><div class="sl" data-ar="🏗️ تدفق استثماري" data-en="🏗️ Investing CF"></div><div class="sv" style="color:#ef4444;">(941) KD</div></div>
+      <div class="stat-box"><div class="sl" data-ar="👥 سحوبات الشركاء" data-en="👥 Partners Withdrawals"></div><div class="sv" style="color:#ef4444;">(8,558) KD</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-ar="⚖️ المركز المالي — 31 ديسمبر 2025" data-en="⚖️ Financial Position — December 31, 2025"></div>
+    <div class="card-sub" data-ar="ملخص الأصول والخصوم وحقوق الملكية" data-en="Assets, liabilities and equity summary"></div>
+    <div class="stat-grid" style="margin-bottom:16px;">
+      <div class="stat-box"><div class="sl" data-ar="إجمالي الأصول" data-en="Total Assets"></div><div class="sv" style="color:#3b82f6;">27,687 KD</div></div>
+      <div class="stat-box"><div class="sl" data-ar="إجمالي الخصوم" data-en="Total Liabilities"></div><div class="sv" style="color:#ef4444;">8,970 KD</div></div>
+      <div class="stat-box"><div class="sl" data-ar="حقوق الملكية" data-en="Total Equity"></div><div class="sv" style="color:#10b981;">18,717 KD</div></div>
+      <div class="stat-box"><div class="sl" data-ar="الأصول المتداولة" data-en="Current Assets"></div><div class="sv">17,863 KD</div></div>
+      <div class="stat-box"><div class="sl" data-ar="الأصول الثابتة (صافي)" data-en="Fixed Assets (Net)"></div><div class="sv">9,824 KD</div></div>
+      <div class="stat-box"><div class="sl" data-ar="الذمم الدائنة" data-en="Accounts Payable"></div><div class="sv" style="color:#f59e0b;">6,909 KD</div></div>
+    </div>
+    <div class="cw cw-300"><canvas id="cBS"></canvas></div>
+  </div>
+</div>
+
+<!-- ══ SIMULATOR ══ -->
+<div id="tab-simulator" class="section">
+  <div class="card">
+    <div class="card-title" data-ar="⚡ قوة الـ 1% — تأثير التحسينات الصغيرة" data-en="⚡ Power of 1% — Impact of Small Improvements"></div>
+    <div class="card-sub" data-ar="ماذا لو تحسّن كل مؤشر بنسبة 1%؟ — أرقام ديسمبر الشهرية" data-en="What if each metric improved by 1%? — Based on December monthly figures"></div>
+    <div class="cw cw-300"><canvas id="cPow"></canvas></div>
+    <div class="insight good" data-ar="💡 زيادة الإيرادات 1% = +84.2 KD للربح — أقوى رافعة ربحية مقارنةً بأي خفض في التكاليف." data-en="💡 1% revenue increase = +84.2 KD profit — the strongest profitability lever vs any cost cut."></div>
+  </div>
+  <div class="target-card">
+    <div class="card-title" style="color:#fff;" data-ar="🎯 التوصية — مسار الربحية المستهدف" data-en="🎯 Recommendation — Target Profitability Path"></div>
+    <div class="card-sub" style="color:rgba(255,255,255,0.5);" data-ar="26 يوم × 350 KD يومياً" data-en="26 working days × 350 KD daily"></div>
+    <div class="g3" style="margin-top:14px;">
+      <div class="stat-box" style="background:rgba(255,255,255,0.06);"><div class="sl" data-ar="أيام العمل" data-en="Working Days"></div><div class="sv" style="color:#e2e8f0;">26</div></div>
+      <div class="stat-box" style="background:rgba(255,255,255,0.06);"><div class="sl" data-ar="المبيعات اليومية" data-en="Target Daily Sales"></div><div class="sv" style="color:#3b82f6;">350 KD</div></div>
+      <div class="stat-box" style="background:rgba(16,185,129,0.12);"><div class="sl" data-ar="الربح المتوقع" data-en="Projected Profit"></div><div class="sv" style="color:#10b981;">801 KD</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-ar="🎰 المحاكي التفاعلي" data-en="🎰 Interactive Simulator"></div>
+    <div class="card-sub" data-ar="حرّك الأشرطة لمحاكاة سيناريوهات مختلفة" data-en="Adjust sliders to simulate different scenarios"></div>
+    <div class="sim-wrap">
+      <div>
+        <div class="sldr"><label><span data-ar="أيام العمل" data-en="Working Days"></span><span id="vDays">26</span></label><input type="range" id="sDays" min="15" max="31" value="26" oninput="runSim()"></div>
+        <div class="sldr"><label><span data-ar="المبيعات اليومية" data-en="Daily Sales"></span><span id="vDaily">350 KD</span></label><input type="range" id="sDaily" min="100" max="800" value="350" oninput="runSim()"></div>
+        <div class="sldr"><label><span data-ar="تغيير المصاريف الإدارية" data-en="G&A Change"></span><span id="vGA">0%</span></label><input type="range" id="sGA" min="-30" max="30" value="0" oninput="runSim()"></div>
+        <div class="sldr"><label><span data-ar="نسبة تكلفة التشغيل" data-en="Operating Cost %"></span><span id="vCost">24%</span></label><input type="range" id="sCost" min="10" max="45" value="24" oninput="runSim()"></div>
+      </div>
+      <div>
+        <div class="sim-out">
+          <div class="sim-box"><div class="sl" data-ar="الإيرادات المتوقعة" data-en="Projected Revenue"></div><div class="sv" style="color:#3b82f6;" id="oRev">—</div></div>
+          <div class="sim-box"><div class="sl" data-ar="إجمالي الربح" data-en="Gross Profit"></div><div class="sv" style="color:#10b981;" id="oGP">—</div></div>
+          <div class="sim-box"><div class="sl" data-ar="المصاريف الإدارية" data-en="G&A Expenses"></div><div class="sv" style="color:#f59e0b;" id="oGA">—</div></div>
+          <div class="sim-box"><div class="sl" data-ar="الاستهلاك" data-en="Depreciation"></div><div class="sv" style="color:var(--muted);">422 KD</div></div>
+          <div class="sim-box sim-net" id="oNetBox"><div class="sl" data-ar="صافي الربح / (الخسارة)" data-en="Net Profit / (Loss)"></div><div class="sv" id="oNet">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+<script>
+// ─── LANGUAGE ──────────────────────────────────────────────────────────────────
+let LANG='ar';
+function setLang(l){
+  LANG=l;
+  document.body.className=l==='ar'?'rtl':'ltr';
+  document.documentElement.lang=l;
+  document.getElementById('btnAR').classList.toggle('active',l==='ar');
+  document.getElementById('btnEN').classList.toggle('active',l==='en');
+  document.querySelectorAll('[data-ar]').forEach(el=>{
+    if(el.tagName==='INPUT'||el.tagName==='CANVAS')return;
+    el.textContent=el.getAttribute('data-'+l)||el.getAttribute('data-ar');
+  });
+  Object.keys(CH).forEach(k=>{if(CH[k]){CH[k].destroy();CH[k]=null;}});
+  Object.keys(TI).forEach(k=>TI[k]=false);
+  TI.overview=true; buildPerf(); buildYTD();
+  const at=document.querySelector('.section.active');
+  const aid=at?at.id.replace('tab-',''):'overview';
+  if(aid==='pl'){TI.pl=true;buildPLTable();buildPLChart();}
+  if(aid==='revenue'){TI.revenue=true;buildRevSrc();buildRevCmp();buildRevTrend();}
+  if(aid==='expenses'){TI.expenses=true;buildChips();buildExp();buildExpTrend();}
+  if(aid==='cashflow'){TI.cashflow=true;buildBS();}
+  if(aid==='simulator'){TI.simulator=true;buildPow();runSim();}
+}
+
+// ─── DATA ──────────────────────────────────────────────────────────────────────
+const D={
+  mRev:8419,mOpCost:2051,mGP:6368,mGA:4241,mDep:422,mNet:1705,
+  prevMRev:9175,prevMGP:7277,prevMGA:3669,prevMNet:3188,
+  ytdRev:65779,ytdOpCost:15726,ytdGP:50053,ytdGA:44135,ytdDep:4952,ytdNet:966,
+  novRev:57360,novOpCost:13675,novGP:43685,novGA:39894,novDep:4530,novNet:-739,
+  cashOpen:4418,cashClose:5409,
+  mRevKnet:4520,mRevCard:3428,mRevCash:471,
+  ytdRevKnet:38309,ytdRevCard:23274,ytdRevCash:3309,
+  mL_ar:['يناير','فبراير','مارس','إبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+  mL_en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  mRevArr:[5783,5401,1361,5701,5979,5127,4770,3830,4356,5877,9175,8419],
+  mProfArr:[422,248,-3464,11,603,-320,-586,-670,-133,-38,3188,1705],
+  mGAArr:[3460,3374,3488,3869,3776,3660,3469,3419,3545,4165,3669,4241],
+  eL_ar:['الرواتب','الإيجار','التنظيف','لوازم المحل','الصيانة','الإجازات','الخدمات المهنية','المرافق','رسوم حكومية','الاستقدام','رسوم بنكية','الهاتف','مكافأة الخدمة'],
+  eL_en:['Salaries','Rent','Cleaning','Shop Supplies','Maintenance','Leave','Prof. Fees','Utilities','Govt Fees','Recruitment','Bank Charges','Telephone','End of Service'],
+  eVals:[1750,1200,301,324,184,128,100,71,25,30,33,28,63],
+  eClr:['#ef4444','#f97316','#8b5cf6','#ec4899','#f59e0b','#06b6d4','#3b82f6','#10b981','#84cc16','#a78bfa','#fb923c','#22d3ee','#fbbf24'],
+};
+
+// P&L rows: {lbl_ar, lbl_en, note, nov, move, dec, rt(row type)}
+// rt: 'r'=normal row, 't'=subtotal, 'n'=net, 'm'=muted zero
+const PLR=[
+  {rt:'r',lbl_ar:'إيرادات التشغيل',lbl_en:'Operating revenue',note:'8',nov:57360,move:8419,dec:65779},
+  {rt:'r',lbl_ar:'تكاليف التشغيل',lbl_en:'Operating cost',note:'9',nov:-13675,move:-2051,dec:-15726},
+  {rt:'t',lbl_ar:'إجمالي الربح',lbl_en:'Gross profit',note:'',nov:43685,move:6368,dec:50053},
+  {rt:'r',lbl_ar:'المصاريف الإدارية والعمومية',lbl_en:'G&A expenses',note:'10',nov:-39894,move:-4241,dec:-44135},
+  {rt:'r',lbl_ar:'الاستهلاك',lbl_en:'Depreciation',note:'3',nov:-4530,move:-422,dec:-4952},
+  {rt:'t',lbl_ar:'الربح من العمليات',lbl_en:'Profit from operations',note:'',nov:-739,move:1705,dec:966},
+  {rt:'m',lbl_ar:'إيرادات أخرى',lbl_en:'Other income',note:'',nov:0,move:0,dec:0},
+  {rt:'m',lbl_ar:'مخصصات لم تعد ضرورية',lbl_en:'Provision no longer required',note:'',nov:0,move:0,dec:0},
+  {rt:'n',lbl_ar:'صافي الربح للفترة',lbl_en:'Net profit for the period',note:'',nov:-739,move:1705,dec:966},
+];
+
+function fN(v,isMov){
+  if(v===0)return '<td class="n hcol" style="color:var(--muted)">—</td>';
+  const neg=v<0, a=Math.abs(v).toLocaleString();
+  const disp=neg?'('+a+')':a;
+  const col=isMov?(neg?'mg':'mp'):(neg?'g':'p');
+  const hcol=isMov?' hcol':'';
+  return `<td class="n ${col}${hcol}">${disp}</td>`;
+}
+function fNOV(v){if(v===0)return '<td class="n" style="color:var(--muted)">—</td>';const neg=v<0,a=Math.abs(v).toLocaleString();return `<td class="n ${neg?'g':'p'}">${neg?'('+a+')':a}</td>`;}
+function fDEC(v){return fNOV(v);}
+
+function buildPLTable(){
+  const b=document.getElementById('plBody');
+  if(!b)return;
+  let h='';
+  PLR.forEach(r=>{
+    const cls=r.rt==='t'?'rt':r.rt==='n'?'rn':r.rt==='m'?'rm':'';
+    const lbl=LANG==='ar'?r.lbl_ar:r.lbl_en;
+    h+=`<tr class="${cls}"><td class="pl-label">${lbl}</td><td style="color:var(--muted);font-size:0.72rem;">${r.note}</td>${fNOV(r.nov)}${fN(r.move,true)}${fDEC(r.dec)}</tr>`;
+  });
+  b.innerHTML=h;
+}
+
+// ─── CHARTS ────────────────────────────────────────────────────────────────────
+const CH={perf:null,ytdRev:null,ytdProfit:null,plc:null,revSrc:null,revCmp:null,revTrend:null,exp:null,expTrend:null,bs:null,pow:null};
+const TI={overview:false,pl:false,revenue:false,expenses:false,cashflow:false,simulator:false};
+
+Chart.defaults.font.family="'Cairo','Inter',sans-serif";
+Chart.defaults.color='#64748b';
+const TT=()=>({backgroundColor:'#1a2235',borderColor:'#1e2d45',borderWidth:1,padding:12,cornerRadius:8});
+const GR=()=>({color:'rgba(255,255,255,0.04)'});
+const kd=v=>{const a=Math.abs(Math.round(v));return v<0?'('+a.toLocaleString()+') KD':a.toLocaleString()+' KD';};
+function mL(){return LANG==='ar'?D.mL_ar:D.mL_en;}
+function eL(){return LANG==='ar'?D.eL_ar:D.eL_en;}
+
+// OVERVIEW
+let showCmp=true;
+function buildPerf(){
+  if(CH.perf)CH.perf.destroy();
+  const la=LANG==='ar';
+  const labels=la?['إيرادات التشغيل','إجمالي الربح','المصاريف الإدارية','صافي الربح']:['Operating Revenue','Gross Profit','G&A Expenses','Net Profit'];
+  const ds=[{label:la?'ديسمبر (الشهر)':'December (Month)',data:[D.mRev,D.mGP,D.mGA,D.mNet],backgroundColor:['rgba(59,130,246,0.7)','rgba(16,185,129,0.7)','rgba(245,158,11,0.7)','rgba(16,185,129,0.7)'],borderColor:['#3b82f6','#10b981','#f59e0b','#10b981'],borderWidth:2,borderRadius:6}];
+  if(showCmp)ds.push({label:la?'نوفمبر (الشهر)':'November (Month)',data:[D.prevMRev,D.prevMGP,D.prevMGA,D.prevMNet],backgroundColor:['rgba(59,130,246,0.2)','rgba(16,185,129,0.2)','rgba(245,158,11,0.2)','rgba(16,185,129,0.2)'],borderColor:['rgba(59,130,246,0.5)','rgba(16,185,129,0.5)','rgba(245,158,11,0.5)','rgba(16,185,129,0.5)'],borderWidth:1,borderRadius:6});
+  CH.perf=new Chart(document.getElementById('cPerf'),{type:'bar',data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}},tooltip:TT()},scales:{x:{grid:GR(),ticks:{color:'#64748b'}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+}
+function toggleCmp(btn){showCmp=!showCmp;btn.setAttribute('data-ar',showCmp?'إخفاء نوفمبر':'إظهار نوفمبر');btn.setAttribute('data-en',showCmp?'Hide November':'Show November');btn.textContent=btn.getAttribute('data-'+LANG);buildPerf();}
+
+function buildYTD(){
+  if(CH.ytdRev)CH.ytdRev.destroy();
+  if(CH.ytdProfit)CH.ytdProfit.destroy();
+  CH.ytdRev=new Chart(document.getElementById('cYtdRev'),{type:'line',data:{labels:mL(),datasets:[{label:'Revenue',data:D.mRevArr,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT(),callbacks:{label:c=>c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b',maxRotation:45}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+  CH.ytdProfit=new Chart(document.getElementById('cYtdProfit'),{type:'bar',data:{labels:mL(),datasets:[{label:'Net',data:D.mProfArr,backgroundColor:D.mProfArr.map(v=>v>=0?'rgba(16,185,129,0.7)':'rgba(239,68,68,0.7)'),borderColor:D.mProfArr.map(v=>v>=0?'#10b981':'#ef4444'),borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT(),callbacks:{label:c=>kd(c.raw)}}},scales:{x:{grid:GR(),ticks:{color:'#64748b',maxRotation:45}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'}}}}});
+}
+
+// P&L
+let plView='month';
+function buildPLChart(){
+  if(CH.plc)CH.plc.destroy();
+  const la=LANG==='ar';
+  const cats=la?['إيرادات التشغيل','إجمالي الربح','المصاريف الإدارية','صافي الربح']:['Operating Revenue','Gross Profit','G&A Expenses','Net Profit'];
+  const ds=[];
+  if(plView==='month'||plView==='both')ds.push({label:la?'ديسمبر (الشهر)':'December (Month)',data:[D.mRev,D.mGP,D.mGA,D.mNet],backgroundColor:['rgba(59,130,246,0.7)','rgba(16,185,129,0.7)','rgba(245,158,11,0.7)','rgba(16,185,129,0.7)'],borderWidth:0,borderRadius:5});
+  if(plView==='ytd'||plView==='both')ds.push({label:la?'تراكمي 2025':'YTD 2025',data:[D.ytdRev,D.ytdGP,D.ytdGA,D.ytdNet],backgroundColor:['rgba(59,130,246,0.25)','rgba(16,185,129,0.25)','rgba(245,158,11,0.25)','rgba(16,185,129,0.25)'],borderColor:['#3b82f6','#10b981','#f59e0b','#10b981'],borderWidth:1,borderRadius:5});
+  CH.plc=new Chart(document.getElementById('cPLChart'),{type:'bar',data:{labels:cats,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}},tooltip:{...TT(),callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b'}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+}
+function switchPLV(v,btn){plView=v;document.querySelectorAll('#tab-pl .tg .tb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildPLChart();}
+
+// REVENUE
+let revType='doughnut';
+function buildRevSrc(){
+  if(CH.revSrc)CH.revSrc.destroy();
+  const la=LANG==='ar';
+  const labels=la?['كي-نت','بطاقات ائتمان','نقدي']:['Knet','Credit Cards','Cash'];
+  const vals=[D.mRevKnet,D.mRevCard,D.mRevCash];
+  const colors=['#3b82f6','#10b981','#f59e0b'];
+  if(revType==='bar'){
+    CH.revSrc=new Chart(document.getElementById('cRevSrc'),{type:'bar',data:{labels,datasets:[{data:vals,backgroundColor:colors.map(c=>c+'bb'),borderWidth:0,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT(),callbacks:{label:c=>c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b'}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+  }else{
+    CH.revSrc=new Chart(document.getElementById('cRevSrc'),{type:revType,data:{labels,datasets:[{data:vals,backgroundColor:colors.map(c=>c+'cc'),borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'},position:'bottom'},tooltip:{...TT(),callbacks:{label:c=>c.label+': '+c.raw.toLocaleString()+' KD ('+(c.raw/D.mRev*100).toFixed(1)+'%)'}}}}});
+  }
+}
+function switchRev(t,btn){revType=t;document.querySelectorAll('#tab-revenue .tg .tb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildRevSrc();}
+
+function buildRevCmp(){
+  if(CH.revCmp)CH.revCmp.destroy();
+  const la=LANG==='ar';
+  const labels=la?['كي-نت','بطاقات ائتمان','نقدي']:['Knet','Credit Cards','Cash'];
+  CH.revCmp=new Chart(document.getElementById('cRevCmp'),{type:'bar',data:{labels,datasets:[
+    {label:la?'ديسمبر (الشهر)':'December (Month)',data:[D.mRevKnet,D.mRevCard,D.mRevCash],backgroundColor:['rgba(59,130,246,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)'],borderWidth:0,borderRadius:5},
+    {label:la?'تراكمي 2025':'YTD 2025',data:[D.ytdRevKnet,D.ytdRevCard,D.ytdRevCash],backgroundColor:['rgba(59,130,246,0.2)','rgba(16,185,129,0.2)','rgba(245,158,11,0.2)'],borderColor:['#3b82f6','#10b981','#f59e0b'],borderWidth:1,borderRadius:5}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}},tooltip:{...TT(),callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b'}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+}
+
+function buildRevTrend(){
+  if(CH.revTrend)CH.revTrend.destroy();
+  const la=LANG==='ar';
+  CH.revTrend=new Chart(document.getElementById('cRevTrend'),{type:'bar',data:{labels:mL(),datasets:[
+    {label:la?'الإيرادات':'Revenue',data:D.mRevArr,backgroundColor:'rgba(59,130,246,0.7)',borderRadius:4,borderWidth:0},
+    {label:la?'المصاريف الإدارية':'G&A Expenses',data:D.mGAArr,backgroundColor:'rgba(245,158,11,0.5)',borderRadius:4,borderWidth:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}},tooltip:{...TT(),callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b',maxRotation:45}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+}
+
+// EXPENSES
+let expType='bar', expVis=D.eVals.map(()=>true);
+function buildChips(){
+  const c=document.getElementById('expChips');c.innerHTML='';
+  eL().forEach((lbl,i)=>{
+    const chip=document.createElement('div');chip.className='chip'+(expVis[i]?'':' off');
+    chip.style.background=expVis[i]?D.eClr[i]+'22':D.eClr[i]+'11';chip.style.borderColor=expVis[i]?D.eClr[i]:'transparent';chip.style.color=expVis[i]?D.eClr[i]:'#64748b';chip.textContent=lbl;
+    chip.onclick=()=>{expVis[i]=!expVis[i];buildChips();buildExp();};c.appendChild(chip);
+  });
+}
+function buildExp(){
+  if(CH.exp)CH.exp.destroy();
+  const vis=eL().map((l,i)=>({l,v:D.eVals[i],c:D.eClr[i]})).filter((_,i)=>expVis[i]);
+  const labels=vis.map(x=>x.l),vals=vis.map(x=>x.v),colors=vis.map(x=>x.c);
+  if(expType==='pie'){
+    CH.exp=new Chart(document.getElementById('cExp'),{type:'doughnut',data:{labels,datasets:[{data:vals,backgroundColor:colors.map(c=>c+'cc'),borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'},position:'bottom'},tooltip:{...TT(),callbacks:{label:c=>c.label+': '+c.raw.toLocaleString()+' KD ('+(c.raw/D.mGA*100).toFixed(1)+'%)'}}}}});
+  }else{
+    CH.exp=new Chart(document.getElementById('cExp'),{type:'bar',data:{labels,datasets:[{data:vals,backgroundColor:colors.map(c=>c+'99'),borderColor:colors,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:expType==='hbar'?'y':'x',plugins:{legend:{display:false},tooltip:{...TT(),callbacks:{label:c=>c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b'}},y:{grid:GR(),ticks:{color:'#64748b'},beginAtZero:true}}}});
+  }
+}
+function switchExp(t,btn){expType=t;document.querySelectorAll('#tab-expenses .tg .tb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildExp();}
+function buildExpTrend(){
+  if(CH.expTrend)CH.expTrend.destroy();
+  const la=LANG==='ar';
+  CH.expTrend=new Chart(document.getElementById('cExpTrend'),{type:'line',data:{labels:mL(),datasets:[
+    {label:la?'الرواتب':'Salaries',data:[1260,1260,1260,1650,1750,1750,1750,1750,1750,1750,1750,1750],borderColor:'#ef4444',backgroundColor:'transparent',tension:0.3,pointRadius:3},
+    {label:la?'الإيجار':'Rent',data:[900,1120,1120,1200,1200,1200,1200,1200,1200,1200,1200,1200],borderColor:'#f97316',backgroundColor:'transparent',tension:0.3,pointRadius:3},
+    {label:la?'التنظيف':'Cleaning',data:[742,545,377,261,125,155,107,96,65,400,173,301],borderColor:'#8b5cf6',backgroundColor:'transparent',tension:0.3,pointRadius:3},
+    {label:la?'لوازم المحل':'Shop Supplies',data:[77,66,53,1,0,11,0,0,0,61,134,324],borderColor:'#ec4899',backgroundColor:'transparent',tension:0.3,pointRadius:3},
+    {label:la?'الصيانة':'Maintenance',data:[118,25,310,20,25,0,33,0,163,145,48,184],borderColor:'#f59e0b',backgroundColor:'transparent',tension:0.3,pointRadius:3},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}},tooltip:{...TT(),callbacks:{label:c=>c.dataset.label+': '+c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b',maxRotation:45}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+}
+
+// CASH FLOW
+function buildBS(){
+  if(CH.bs)CH.bs.destroy();
+  const labels=LANG==='ar'?['أصول متداولة','أصول ثابتة','إجمالي الأصول','خصوم متداولة','خصوم طويلة','حقوق الملكية']:['Current Assets','Fixed Assets','Total Assets','Current Liab.','Non-Current Liab.','Equity'];
+  CH.bs=new Chart(document.getElementById('cBS'),{type:'bar',data:{labels,datasets:[{data:[17863,9824,27687,6909,2061,18717],backgroundColor:['rgba(59,130,246,0.7)','rgba(59,130,246,0.4)','rgba(59,130,246,0.9)','rgba(239,68,68,0.7)','rgba(239,68,68,0.4)','rgba(16,185,129,0.7)'],borderWidth:0,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT(),callbacks:{label:c=>c.raw.toLocaleString()+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b'}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>v.toLocaleString()+' KD'},beginAtZero:true}}}});
+}
+
+// SIMULATOR
+function buildPow(){
+  if(CH.pow)CH.pow.destroy();
+  const labels=LANG==='ar'?['زيادة الإيرادات 1%','تخفيض تكاليف التشغيل 1%','تخفيض المصاريف الإدارية 1%']:['1% Revenue Increase','1% Op. Cost Decrease','1% G&A Decrease'];
+  CH.pow=new Chart(document.getElementById('cPow'),{type:'bar',data:{labels,datasets:[{data:[D.mRev*0.01,D.mOpCost*0.01,D.mGA*0.01],backgroundColor:['rgba(16,185,129,0.7)','rgba(59,130,246,0.7)','rgba(245,158,11,0.7)'],borderColor:['#10b981','#3b82f6','#f59e0b'],borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT(),callbacks:{label:c=>'+ '+c.raw.toFixed(2)+' KD'}}},scales:{x:{grid:GR(),ticks:{color:'#64748b'}},y:{grid:GR(),ticks:{color:'#64748b',callback:v=>'+'+v.toFixed(1)+' KD'},beginAtZero:true}}}});
+}
+function runSim(){
+  const days=+document.getElementById('sDays').value,daily=+document.getElementById('sDaily').value,gaChg=+document.getElementById('sGA').value,costPct=+document.getElementById('sCost').value;
+  document.getElementById('vDays').textContent=days;document.getElementById('vDaily').textContent=daily+' KD';document.getElementById('vGA').textContent=(gaChg>=0?'+':'')+gaChg+'%';document.getElementById('vCost').textContent=costPct+'%';
+  const rev=days*daily,opCost=rev*costPct/100,gp=rev-opCost,ga=D.mGA*(1+gaChg/100),net=gp-ga-D.mDep;
+  document.getElementById('oRev').textContent=kd(rev);document.getElementById('oGP').textContent=kd(gp);document.getElementById('oGA').textContent=kd(ga);
+  document.getElementById('oNet').textContent=kd(net);document.getElementById('oNet').style.color=net>=0?'#10b981':'#ef4444';
+  document.getElementById('oNetBox').className='sim-box sim-net'+(net<0?' sim-net-loss':'');
+}
+
+// TABS
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(!TI[id]){
+    TI[id]=true;
+    if(id==='pl'){buildPLTable();buildPLChart();}
+    if(id==='revenue'){buildRevSrc();buildRevCmp();buildRevTrend();}
+    if(id==='expenses'){buildChips();buildExp();buildExpTrend();}
+    if(id==='cashflow'){buildBS();}
+    if(id==='simulator'){buildPow();runSim();}
+  }
+}
+
+// BOOT
+window.addEventListener('load',()=>{
+  document.querySelectorAll('[data-ar]').forEach(el=>{
+    if(el.tagName==='INPUT'||el.tagName==='CANVAS')return;
+    el.textContent=el.getAttribute('data-ar');
+  });
+  TI.overview=true;
+  buildPerf();buildYTD();runSim();
+});
+</script>
+</body>
+</html>
